@@ -2,7 +2,6 @@ package password
 
 import (
 	"math/rand"
-	"time"
 )
 
 const (
@@ -15,6 +14,7 @@ const (
 func GeneratePassword(length int, useUppercase, useDigits, useSpecialChars bool) string {
 	var validChars string
 	validChars += lowercaseLetters
+
 	if useUppercase {
 		validChars += uppercaseLetters
 	}
@@ -24,8 +24,10 @@ func GeneratePassword(length int, useUppercase, useDigits, useSpecialChars bool)
 	if useSpecialChars {
 		validChars += specialChars
 	}
+	if validChars == "" {
+		validChars = lowercaseLetters + uppercaseLetters + digits + specialChars
+	}
 
-	rand.New(rand.NewSource(time.Now().Unix()))
 	password := make([]byte, length)
 	for i := 0; i < length; i++ {
 		password[i] = validChars[rand.Intn(len(validChars))]
