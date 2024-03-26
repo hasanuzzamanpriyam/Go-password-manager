@@ -4,10 +4,16 @@ import (
 	"Password-manager/password"
 	"Password-manager/storage"
 	"fmt"
+	"math/rand"
 	"os"
+	"time"
 )
 
 const filename = "passwords.json"
+
+func init() {
+	rand.New(rand.NewSource(time.Now().UnixNano()))
+}
 
 func main() {
 	fmt.Println("Welcome to Password Manager!")
@@ -54,7 +60,7 @@ func main() {
 func getPasswordEntryFromUser() storage.PasswordEntry {
 	var service, username string
 	var length int
-	var useUppercase, useDigits, useSpecialChars bool
+	var useUppercase, useDigits, useSpecialChars string
 
 	fmt.Print("Enter service name: ")
 	fmt.Scanln(&service)
@@ -69,7 +75,7 @@ func getPasswordEntryFromUser() storage.PasswordEntry {
 	fmt.Print("Use special characters? (y/n) ")
 	fmt.Scanln(&useSpecialChars)
 
-	password := password.GeneratePassword(length, useUppercase, useDigits, useSpecialChars)
+	password := password.GeneratePassword(length, useUppercase == "y", useDigits == "y", useSpecialChars == "y")
 	return storage.PasswordEntry{
 		Service:  service,
 		Username: username,
